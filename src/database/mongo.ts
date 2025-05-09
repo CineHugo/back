@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { MongoClient as Mongo, Db } from "mongodb";
 
 export const MongoClient = {
