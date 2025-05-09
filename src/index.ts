@@ -5,6 +5,8 @@ import { MongoGetUsersRepository } from "./controllers/repositories/get-users/mo
 import { MongoClient } from "./database/mongo";
 import { MongoCreateUserRepository } from "./controllers/repositories/create-user/mongo-create-user";
 import { CreateUserController } from "./controllers/create-user/create-user";
+import { MongoUpdateUserRepository } from "./controllers/repositories/update-user/mongo-update-user";
+import { UpdateUserController } from "./controllers/update-user/update-user";
 
 const main = async () => {
   config();
@@ -34,6 +36,21 @@ const main = async () => {
 
     const { body, statusCode } = await createUserController.handle({
       body: req.body,
+    });
+
+    res.status(statusCode).send(body);
+  });
+
+  app.patch("/users/:id", async (req, res) => {
+    const mongoUpdateUserRepotory = new MongoUpdateUserRepository();
+
+    const updateUserController = new UpdateUserController(
+      mongoUpdateUserRepotory
+    );
+
+    const { body, statusCode } = await updateUserController.handle({
+      body: req.body,
+      params: req.params,
     });
 
     res.status(statusCode).send(body);
