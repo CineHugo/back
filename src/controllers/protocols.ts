@@ -1,5 +1,11 @@
 /* eslint-disable no-unused-vars */
-interface HttpResponse<T> {
+export interface HttpResponse<T> {
     statusCode: number;
     body: T | string;
 }
+
+ export interface HttpRequest<B>{
+    params?: any;
+    header?: any;
+    body?: B;
+ }
