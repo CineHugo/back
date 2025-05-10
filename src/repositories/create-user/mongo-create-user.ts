@@ -5,14 +5,18 @@ import {
   ICreateUserRepository,
 } from "../../controllers/create-user/protocols";
 import { MongoUser } from "../mongo-protocols";
+import bcrypt from "bcrypt";
 
 export class MongoCreateUserRepository implements ICreateUserRepository {
   async createUser(params: CreateUserParams): Promise<User> {
     const now = new Date();
 
+    const password = await bcrypt.hash(params.password, 10);
+
     // Completa os dados com os campos obrigatórios
     const userData: MongoUser = {
       ...params,
+      password: password,
       role: Role.USER,
       rememberToken: null,
       createdAt: now,

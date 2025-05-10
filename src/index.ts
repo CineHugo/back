@@ -11,6 +11,8 @@ import { MongoDeleteUserRepository } from "./repositories/delete-user/mongo-dele
 import { DeleteUserController } from "./controllers/delete-user/delete-user";
 import { MongoGetUserRepository } from "./repositories/get-user/mongo-get-user";
 import { GetUserController } from "./controllers/get-user/get-user";
+import { MongoAuthRepository } from "./repositories/auth/mongo-auth";
+import { LoginController } from "./controllers/auth/login";
 
 const main = async () => {
   config();
@@ -20,6 +22,18 @@ const main = async () => {
   app.use(express.json());
 
   await MongoClient.connect();
+
+  app.post("/login", async (req, res) => {
+    const mongoAuthRepository = new MongoAuthRepository();
+    const loginController = new LoginController(mongoAuthRepository);
+
+    const { body, statusCode } = await loginController.handle({
+      body: req.body,
+    });
+
+    res.status(statusCode).send(body);
+  });
+
 
   app.get("/users", async (req, res) => {
     const mongoGetUsersRepository = new MongoGetUsersRepository();

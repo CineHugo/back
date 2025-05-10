@@ -23,3 +23,10 @@ export const serverError = (): HttpResponse<string> => {
     body: 'Something went wrong',
   };
 };
+
+export const unauthorized = (): HttpResponse<string> => {
+  return {
+    statusCode: HttpStatusCode.UNAUTHORIZED,
+    body: 'Unauthorized',
+  };
+};
