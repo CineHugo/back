@@ -1,15 +1,10 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 import validator from "validator";
 import { User } from "../../models/user";
-import { HttpRequest, HttpResponse } from "../protocols";
-import {
-  CreateUserParams,
-  ICreateUsercontroller,
-  ICreateUserRepository,
-} from "./protocols";
+import { HttpRequest, HttpResponse, IController } from "../protocols";
+import { CreateUserParams, ICreateUserRepository } from "./protocols";
 
-export class CreateUserController implements ICreateUsercontroller {
+export class CreateUserController implements IController {
   constructor(private readonly createUserRepository: ICreateUserRepository) {}
 
   async handle(

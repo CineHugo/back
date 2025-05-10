@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { IGetUsersController, IGetUsersRepository } from "./protocols";
+import { IController } from "../protocols";
+import { IGetUsersRepository } from "./protocols";
 
 
-export class GetUsersController implements IGetUsersController {
+export class GetUsersController implements IController {
   // getUsersRepository: IGetUsersRepository;
 
   // constructor(getUsersRepository: IGetUsersRepository) {
