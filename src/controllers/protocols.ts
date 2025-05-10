@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 export interface HttpResponse<T> {
-    statusCode: number;
+    statusCode: HttpStatusCode;
     body: T;
 }
 
@@ -8,6 +8,13 @@ export interface HttpResponse<T> {
     params?: any;
     header?: any;
     body?: B;
+ }
+
+ export enum HttpStatusCode {
+   OK = 200,
+   CREATED = 201,
+   BAD_REQUEST = 400,
+   SERVER_ERROR = 500,
  }
 
  export interface IController {
