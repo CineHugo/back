@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { ObjectId } from "mongodb";
 import { MongoClient } from "../../database/mongo";
 import { User } from "../../models/user";
