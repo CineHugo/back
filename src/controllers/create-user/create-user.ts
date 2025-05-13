@@ -34,7 +34,11 @@ export class CreateUserController implements IController {
 
       return created<User>(user);
     } catch (error) {
-      //   console.error("Erro no CreateUserController:", error);
+      if (error instanceof Error && error.message === "Email already in use") {
+        return badRequest(error.message);
+      } else if (error instanceof Error && error.message === "Password must be strong") {
+        return badRequest(error.message);
+      }
       return serverError();
     }
   }
