@@ -6,18 +6,11 @@ import {
   UpdateUserParams,
 } from "../../controllers/update-user/protocols";
 import { MongoUser } from "../mongo-protocols";
+import bcrypt from "bcrypt";
+
 
 export class MongoUpdateUserRepository implements IUpdateUserRepository {
   async updateUser(id: string, params: UpdateUserParams): Promise<User> {
-    await MongoClient.db.collection("users").updateOne(
-      { _id: new ObjectId(id) },
-      {
-        $set: {
-          ...params,
-        },
-      }
-    );
-
     if (params.password) {
       const passwordStrong = (password: string): boolean => {
         const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/;
@@ -27,7 +20,18 @@ export class MongoUpdateUserRepository implements IUpdateUserRepository {
       if (!passwordStrong(params.password)) {
         throw new Error("Password must be stronger");
       }
+
+      params.password = await bcrypt.hash(params.password, 10);
     }
+
+    await MongoClient.db.collection("users").updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          ...params,
+        },
+      }
+    );
 
     const user = await MongoClient.db
       .collection<MongoUser>("users")
