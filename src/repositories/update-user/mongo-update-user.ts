@@ -18,6 +18,17 @@ export class MongoUpdateUserRepository implements IUpdateUserRepository {
       }
     );
 
+    if (params.password) {
+      const passwordStrong = (password: string): boolean => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/;
+        return passwordRegex.test(password);
+      };
+
+      if (!passwordStrong(params.password)) {
+        throw new Error("Password must be stronger");
+      }
+    }
+
     const user = await MongoClient.db
       .collection<MongoUser>("users")
       .findOne({ _id: new ObjectId(id) });
