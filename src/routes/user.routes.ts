@@ -9,7 +9,7 @@ import { MongoDeleteUserRepository } from "../repositories/delete-user/mongo-del
 import { DeleteUserController } from "../controllers/delete-user/delete-user";
 import { MongoGetUserRepository } from "../repositories/get-user/mongo-get-user";
 import { GetUserController } from "../controllers/get-user/get-user";
-import { isAuthenticated, isAdmin } from "../middlewares/auth";
+import { isAuthenticated, isAdmin, AuthenticatedRequest } from "../middlewares/auth";
 
 const userRoutes = Router();
 
@@ -54,7 +54,15 @@ userRoutes.get("/:id", isAuthenticated, async (req, res) => {
 });
 
 // Rota para atualizar um usuário
-userRoutes.patch("/update/:id", isAuthenticated, async (req, res) => {
+userRoutes.patch("/update/:id", isAuthenticated, async (req: AuthenticatedRequest, res) => {
+  // Verificar se o usuário está tentando alterar a role
+  if (req.body.role && req.user?.role !== "admin") {
+    res.status(403).json({
+      error: "Apenas administradores podem alterar a role de usuários",
+    });
+    return;
+  }
+
   const mongoUpdateUserRepository = new MongoUpdateUserRepository(); 
 
   const updateUserController = new UpdateUserController(
