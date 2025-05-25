@@ -40,7 +40,7 @@ userRoutes.post("/create/", async (req, res) => {
 });
 
 // Rota para buscar um usuário específico pelo ID
-userRoutes.get("/user/:id", isAuthenticated, async (req, res) => {
+userRoutes.get("/:id", isAuthenticated, async (req, res) => {
   const mongoGetUserRepository = new MongoGetUserRepository(); 
 
   const getUserController = new GetUserController(mongoGetUserRepository);
