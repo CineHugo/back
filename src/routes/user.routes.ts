@@ -55,10 +55,10 @@ userRoutes.get("/:id", isAuthenticated, async (req, res) => {
 
 // Rota para atualizar um usuário
 userRoutes.patch("/update/:id", isAuthenticated, async (req: AuthenticatedRequest, res) => {
-  // Verificar se o usuário está tentando alterar a role
-  if (req.body.role && req.user?.role !== "admin") {
+  // Verificar se o usuário está tentando alterar a role para admin
+  if (req.body.role && req.body.role === "admin" && req.user?.role !== "admin") {
     res.status(403).json({
-      error: "Apenas administradores podem alterar a role de usuários",
+      error: "Apenas administradores podem alterar a role para admin",
     });
     return;
   }
