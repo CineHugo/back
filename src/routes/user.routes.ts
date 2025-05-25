@@ -9,11 +9,12 @@ import { MongoDeleteUserRepository } from "../repositories/delete-user/mongo-del
 import { DeleteUserController } from "../controllers/delete-user/delete-user";
 import { MongoGetUserRepository } from "../repositories/get-user/mongo-get-user";
 import { GetUserController } from "../controllers/get-user/get-user";
+import { isAuthenticated, isAdmin } from "../middlewares/auth";
 
 const userRoutes = Router();
 
-// Rota para listar todos os usuários
-userRoutes.get("/", async (req, res) => {
+// Rota para listar todos os usuários - requer autenticação e admin
+userRoutes.get("/", isAuthenticated, isAdmin, async (req, res) => {
   const mongoGetUsersRepository = new MongoGetUsersRepository();
   
   const getUsersController = new GetUsersController(mongoGetUsersRepository);
@@ -39,7 +40,7 @@ userRoutes.post("/create/", async (req, res) => {
 });
 
 // Rota para buscar um usuário específico pelo ID
-userRoutes.get("/user/:id", async (req, res) => {
+userRoutes.get("/user/:id", isAuthenticated, async (req, res) => {
   const mongoGetUserRepository = new MongoGetUserRepository(); 
 
   const getUserController = new GetUserController(mongoGetUserRepository);
@@ -53,7 +54,7 @@ userRoutes.get("/user/:id", async (req, res) => {
 });
 
 // Rota para atualizar um usuário
-userRoutes.patch("/update/:id", async (req, res) => {
+userRoutes.patch("/update/:id", isAuthenticated, async (req, res) => {
   const mongoUpdateUserRepository = new MongoUpdateUserRepository(); 
 
   const updateUserController = new UpdateUserController(
@@ -69,7 +70,7 @@ userRoutes.patch("/update/:id", async (req, res) => {
 });
 
 // Rota para deletar um usuário
-userRoutes.delete("/delete/:id", async (req, res) => {
+userRoutes.delete("/delete/:id", isAuthenticated, async (req, res) => {
   const mongoDeleteUserRepository = new MongoDeleteUserRepository(); 
 
   const deleteUserController = new DeleteUserController(
