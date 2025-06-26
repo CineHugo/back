@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import validator from "validator";
-import { User } from "../../models/user";
-import { badRequest, ok, serverError } from "../helpers";
-import { HttpRequest, HttpResponse, IController } from "../protocols";
+import { User } from "../../../models/user";
+import { badRequest, ok, serverError } from "../../helpers";
+import { HttpRequest, HttpResponse, IController } from "../../protocols";
 import { IUpdateUserRepository, UpdateUserParams } from "./protocols";
 
 export class UpdateUserController implements IController {

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { User } from "../../models/user";
+import { User } from "../../../models/user";
 
 export interface CreateUserParams {
   firstName: string;

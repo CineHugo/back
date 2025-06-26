@@ -1,10 +1,10 @@
-import { MongoClient } from "../../database/mongo";
-import { User, Role } from "../../models/user";
+import { MongoClient } from "../../../database/mongo";
+import { User, Role } from "../../../models/user";
 import {
   CreateUserParams,
   ICreateUserRepository,
-} from "../../controllers/create-user/protocols";
-import { MongoUser } from "../mongo-protocols";
+} from "../../../controllers/user/create-user/protocols";
+import { MongoUser } from "../../mongo-protocols";
 import bcrypt from "bcrypt";
 
 export class MongoCreateUserRepository implements ICreateUserRepository {

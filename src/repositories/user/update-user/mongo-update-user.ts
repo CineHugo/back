@@ -1,13 +1,12 @@
 import { ObjectId } from "mongodb";
-import { MongoClient } from "../../database/mongo";
-import { User } from "../../models/user";
+import { MongoClient } from "../../../database/mongo";
+import { User } from "../../../models/user";
 import {
   IUpdateUserRepository,
   UpdateUserParams,
-} from "../../controllers/update-user/protocols";
-import { MongoUser } from "../mongo-protocols";
+} from "../../../controllers/user/update-user/protocols";
+import { MongoUser } from "../../mongo-protocols";
 import bcrypt from "bcrypt";
-
 
 export class MongoUpdateUserRepository implements IUpdateUserRepository {
   async updateUser(id: string, params: UpdateUserParams): Promise<User> {

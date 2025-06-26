@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { User } from "../../models/user";
-import { badRequest, ok, serverError } from "../helpers";
-import { HttpRequest, HttpResponse, IController } from "../protocols";
+import { User } from "../../../models/user";
+import { badRequest, ok, serverError } from "../../helpers";
+import { HttpRequest, HttpResponse, IController } from "../../protocols";
 import { IGetUserRepository } from "./protocols";
 
 export class GetUserController implements IController {
