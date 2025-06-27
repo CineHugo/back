@@ -18,6 +18,10 @@ export class GetMovieController implements IController {
 
       const movie = await this.getMovieRepository.getMovie(id);
 
+      if (!movie) {
+        return badRequest("Movie not found");
+      }
+
       return ok<Movie>(movie);
     } catch (error) {
       return serverError();

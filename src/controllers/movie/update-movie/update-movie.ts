@@ -38,6 +38,10 @@ export class UpdateMovieController implements IController{
 
             const movie = await this.updateMovieRepository.updateMovie(id, body);
 
+            if (!movie) {
+                return badRequest("Movie not found or no fields to update");
+            }
+
             return ok<Movie>(movie);
         } catch (error) {
             return serverError();
