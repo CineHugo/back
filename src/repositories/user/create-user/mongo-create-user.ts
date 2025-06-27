@@ -9,7 +9,6 @@ import bcrypt from "bcrypt";
 
 export class MongoCreateUserRepository implements ICreateUserRepository {
   async createUser(params: CreateUserParams): Promise<User> {
-    const now = new Date();
 
     const emailExists = await MongoClient.db
       .collection("users")
@@ -36,8 +35,8 @@ export class MongoCreateUserRepository implements ICreateUserRepository {
       password: password,
       role: Role.USER,
       rememberToken: null,
-      createdAt: now,
-      updatedAt: now,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       deletedAt: null,
     };
 
