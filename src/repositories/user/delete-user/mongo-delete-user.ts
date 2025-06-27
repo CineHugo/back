@@ -24,6 +24,6 @@ export class MongoDeleteUserRepository implements IDeleteUserRepository {
 
     const { _id, ...rest } = user;
 
-    return { id: _id.toHexString(), ...rest };
+    return { id: _id, ...rest };
   }
 }

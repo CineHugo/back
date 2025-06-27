@@ -24,6 +24,6 @@ export class MongoDeleteMovieRepository implements IDeleteMovieRepository {
 
     const { _id, ...rest } = movie;
 
-    return { id: _id.toHexString(), ...rest };
+    return { id: _id, ...rest };
   }
 }

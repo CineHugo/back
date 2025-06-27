@@ -12,7 +12,7 @@ export class MongoGetMoviesRepository implements IGetMoviesRepository {
 
     return movies.map(({ _id, ...rest }) => ({
       ...rest,
-      id: _id.toHexString(),
+      id: _id,
     }));
   }
 

@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export interface Movie {
-  id: string;
+  id: ObjectId;
   title: string;
   synopsis: string;
   release_date: Date;
