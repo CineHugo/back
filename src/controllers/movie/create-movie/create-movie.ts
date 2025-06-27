@@ -1,43 +1,61 @@
 /* eslint-disable no-unused-vars */
-import validator from "validator";
 import { Movie } from "../../../models/movie";
 import { HttpRequest, HttpResponse, IController } from "../../protocols";
 import { CreateMovieParams, ICreateMovieRepository } from "./protocols";
 import { badRequest, created, serverError } from "../../helpers";
+import {
+  ImageStorageService,
+  Base64Image,
+} from "../../../services/image-storage-service";
+
+interface CreateMovieRequest
+  extends Omit<CreateMovieParams, "main_image_url" | "banner_image_url"> {
+  main_image: Base64Image;
+  banner_image: Base64Image;
+}
 
 export class CreateMovieController implements IController {
-    constructor(private readonly createMovieRepository: ICreateMovieRepository) {}
+  constructor(private readonly createMovieRepository: ICreateMovieRepository) {}
 
-        async handle( httpRequest: HttpRequest<CreateMovieParams>
-    ): Promise<HttpResponse<Movie | string>> {
-        try {
-            // Verificar campos obrigatórios
-            const requiredFields = [
-                "title",
-                "synopsis",
-                "release_date",
-                "main_image_url",
-                "banner_image_url"
-            ];
+  async handle(
+    httpRequest: HttpRequest<CreateMovieRequest>
+  ): Promise<HttpResponse<Movie | string>> {
+    try {
+      const { title, synopsis, release_date, main_image, banner_image } =
+        httpRequest.body!;
 
-            for (const field of requiredFields) {
-                const value = httpRequest?.body?.[field as keyof CreateMovieParams];
-                if (
-                    value === undefined ||
-                    value === null ||
-                    (typeof value === "string" && value.length === 0)
-                ) {
-                    return badRequest(`Field ${field} is required`);
-                }
-            }
+      if (!title || !synopsis || !release_date) {
+        return badRequest(
+          "Fields title, synopsis, and release_date are required."
+        );
+      }
+      if (!main_image?.data || !banner_image?.data) {
+        return badRequest(
+          "Fields main_image and banner_image are required with base64 data."
+        );
+      }
 
-            const movie = await this.createMovieRepository.createMovie(
-                httpRequest.body!
-            );
+      // Salva as imagens em paralelo usando o serviço
+      const [mainImageUrl, bannerImageUrl] = await Promise.all([
+        ImageStorageService.save(main_image),
+        ImageStorageService.save(banner_image),
+      ]);
 
-            return created<Movie>(movie);
-        } catch (error) {
-            return serverError();
-        }
+      //  Monta o objeto final para o repositório
+      const movieDataToCreate: CreateMovieParams = {
+        title,
+        synopsis,
+        release_date,
+        main_image_url: mainImageUrl,
+        banner_image_url: bannerImageUrl,
+      };
+
+      const movie = await this.createMovieRepository.createMovie(movieDataToCreate);
+
+      return created<Movie>(movie);
+    } catch (error) {
+      console.error(error);
+      return serverError();
     }
+  }
 }
