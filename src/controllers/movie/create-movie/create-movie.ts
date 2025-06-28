@@ -9,7 +9,7 @@ import {
 } from "../../../services/image-storage-service";
 
 interface CreateMovieRequest
-  extends Omit<CreateMovieParams, "main_image_url" | "banner_image_url"> {
+  extends Omit<CreateMovieParams, "mainImageUrl" | "bannerImageUrl"> {
   main_image: Base64Image;
   banner_image: Base64Image;
 }
@@ -21,12 +21,12 @@ export class CreateMovieController implements IController {
     httpRequest: HttpRequest<CreateMovieRequest>
   ): Promise<HttpResponse<Movie | string>> {
     try {
-      const { title, synopsis, release_date, main_image, banner_image } =
+      const { title, synopsis, releaseDate, main_image, banner_image } =
         httpRequest.body!;
 
-      if (!title || !synopsis || !release_date) {
+      if (!title || !synopsis || !releaseDate) {
         return badRequest(
-          "Fields title, synopsis, and release_date are required."
+          "Fields title, synopsis, and releaseDate are required."
         );
       }
       if (!main_image?.data || !banner_image?.data) {
@@ -45,12 +45,13 @@ export class CreateMovieController implements IController {
       const movieDataToCreate: CreateMovieParams = {
         title,
         synopsis,
-        release_date,
-        main_image_url: mainImageUrl,
-        banner_image_url: bannerImageUrl,
+        releaseDate,
+        mainImageUrl: mainImageUrl,
+        bannerImageUrl: bannerImageUrl,
       };
 
-      const movie = await this.createMovieRepository.createMovie(movieDataToCreate);
+      const movie =
+        await this.createMovieRepository.createMovie(movieDataToCreate);
 
       return created<Movie>(movie);
     } catch (error) {

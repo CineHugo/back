@@ -13,62 +13,72 @@ import { DeleteSessionController } from "../controllers/session/delete-session/d
 const sessionsRoutes = Router();
 
 sessionsRoutes.get("/", async (req, res) => {
-    const mongoGetSessionsRepository = new MongoGetSessionsRepository();
+  const mongoGetSessionsRepository = new MongoGetSessionsRepository();
 
-    const getSessionsController = new GetSessionsController(mongoGetSessionsRepository);
+  const getSessionsController = new GetSessionsController(
+    mongoGetSessionsRepository
+  );
 
-    const { body, statusCode } = await getSessionsController.handle();
+  const { body, statusCode } = await getSessionsController.handle();
 
-    res.status(statusCode).send(body);
+  res.status(statusCode).send(body);
 });
 
 sessionsRoutes.get("/session/:id", async (req, res) => {
-    const mongoGetSessionRepository = new MongoGetSessionRepository();
+  const mongoGetSessionRepository = new MongoGetSessionRepository();
 
-    const getSessionController = new GetSessionController(mongoGetSessionRepository);
+  const getSessionController = new GetSessionController(
+    mongoGetSessionRepository
+  );
 
-    const { body, statusCode } = await getSessionController.handle({
-        params: req.params,
-    });
+  const { body, statusCode } = await getSessionController.handle({
+    params: req.params,
+  });
 
-    res.status(statusCode).send(body);
+  res.status(statusCode).send(body);
 });
 
 sessionsRoutes.post("/create", async (req, res) => {
-    const mongoCreateSessionRepository = new MongoCreateSessionRepository();
+  const mongoCreateSessionRepository = new MongoCreateSessionRepository();
 
-    const createSessionController = new CreateSessionController(mongoCreateSessionRepository);
+  const createSessionController = new CreateSessionController(
+    mongoCreateSessionRepository
+  );
 
-    const { body, statusCode } = await createSessionController.handle({
-        body: req.body,
-    });
+  const { body, statusCode } = await createSessionController.handle({
+    body: req.body,
+  });
 
-    res.status(statusCode).send(body);
+  res.status(statusCode).send(body);
 });
 
 sessionsRoutes.patch("/update/:id", async (req, res) => {
-    const mongoUpdateSessionRepository = new MongoUpdateSessionRepository();
+  const mongoUpdateSessionRepository = new MongoUpdateSessionRepository();
 
-    const updateSessionController = new UpdateSessionController(mongoUpdateSessionRepository);
+  const updateSessionController = new UpdateSessionController(
+    mongoUpdateSessionRepository
+  );
 
-    const { body, statusCode } = await updateSessionController.handle({
-        body: req.body,
-        params: req.params,
-    });
+  const { body, statusCode } = await updateSessionController.handle({
+    body: req.body,
+    params: req.params,
+  });
 
-    res.status(statusCode).send(body);
+  res.status(statusCode).send(body);
 });
 
 sessionsRoutes.delete("/delete/:id", async (req, res) => {
-    const mongoDeleteSessionRepository = new MongoDeleteSessionRepository();
+  const mongoDeleteSessionRepository = new MongoDeleteSessionRepository();
 
-    const deleteSessionController = new DeleteSessionController(mongoDeleteSessionRepository);
+  const deleteSessionController = new DeleteSessionController(
+    mongoDeleteSessionRepository
+  );
 
-    const { body, statusCode } = await deleteSessionController.handle({
-        params: req.params,
-    });
+  const { body, statusCode } = await deleteSessionController.handle({
+    params: req.params,
+  });
 
-    res.status(statusCode).send(body);
+  res.status(statusCode).send(body);
 });
 
 export default sessionsRoutes;

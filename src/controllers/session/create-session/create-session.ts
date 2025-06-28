@@ -5,29 +5,31 @@ import { HttpRequest, HttpResponse, IController } from "../../protocols";
 import { CreateSessionParams, ICreateSessionRepository } from "./protocols";
 
 export class CreateSessionController implements IController {
-  constructor(private readonly createSessionRepository: ICreateSessionRepository) {}
+  constructor(
+    private readonly createSessionRepository: ICreateSessionRepository
+  ) {}
 
   async handle(
     httpRequest: HttpRequest<CreateSessionParams>
   ): Promise<HttpResponse<Session | string>> {
     try {
-      const { movie_id, room_id, starts_at, ends_at, duration_min, base_price } =
+      const { movieId, roomId, startsAt, durationMin, basePrice } =
         httpRequest.body!;
 
-      if (!movie_id || !room_id || !starts_at || !ends_at || !duration_min || !base_price) {
+      if (!movieId || !roomId || !startsAt || !durationMin || !basePrice) {
         return badRequest("All fields are required.");
       }
 
       const sessionDataToCreate: CreateSessionParams = {
-        movie_id,
-        room_id,
-        starts_at,
-        ends_at,
-        duration_min,
-        base_price,
+        movieId,
+        roomId,
+        startsAt,
+        durationMin,
+        basePrice,
       };
 
-      const session = await this.createSessionRepository.createSession(sessionDataToCreate);
+      const session =
+        await this.createSessionRepository.createSession(sessionDataToCreate);
 
       return created<Session>(session);
     } catch (error) {

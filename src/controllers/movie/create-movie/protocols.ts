@@ -4,9 +4,9 @@ import { Movie } from "../../../models/movie";
 export interface CreateMovieParams {
   title: string;
   synopsis: string;
-  release_date: Date;
-  main_image_url: string;
-  banner_image_url: string;
+  releaseDate: Date;
+  mainImageUrl: string;
+  bannerImageUrl: string;
 }
 
 export interface ICreateMovieRepository {

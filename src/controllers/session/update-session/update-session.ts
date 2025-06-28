@@ -25,12 +25,11 @@ export class UpdateSessionController implements IController {
       }
 
       const allowedFieldsToUpdate: (keyof UpdateSessionParams)[] = [
-        "movie_id",
-        "room_id",
-        "starts_at",
-        "ends_at",
-        "duration_min",
-        "base_price",
+        "movieId",
+        "roomId",
+        "startsAt",
+        "durationMin",
+        "basePrice",
       ];
 
       const someFieldsAreNotAllowedToUpdate = Object.keys(body).some(
