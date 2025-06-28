@@ -6,6 +6,7 @@ import { MongoClient } from "./database/mongo";
 import userRoutes from "./routes/user.routes"; // Importa as rotas de usuário
 import authRoutes from "./routes/auth.routes"; // Importa as rotas de autenticação
 import moviesRoutes from "./routes/movies.routes";
+import sessionsRoutes from "./routes/sessions.routes";
 
 const main = async () => {
   config();
@@ -25,6 +26,8 @@ const main = async () => {
   app.use("/users", userRoutes);
 
   app.use("/movies", moviesRoutes);
+
+  app.use("/sessions", sessionsRoutes);
 
   
 
