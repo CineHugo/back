@@ -16,6 +16,7 @@ export interface HttpResponse<T> {
    BAD_REQUEST = 400,
    UNAUTHORIZED = 401,
    SERVER_ERROR = 500,
+   CONFLICT = 409,
  }
 
  export interface IController {

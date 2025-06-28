@@ -30,3 +30,10 @@ export const unauthorized = (): HttpResponse<string> => {
     body: 'Unauthorized',
   };
 };
+
+export const conflict = (message: string): HttpResponse<string> => {
+  return {
+    statusCode: HttpStatusCode.CONFLICT,
+    body: message,
+  };
+};
