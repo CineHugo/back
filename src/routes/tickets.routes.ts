@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Router } from "express";
 
 // Supondo que você tenha um middleware para verificar a autenticação
@@ -15,19 +16,28 @@ import { CreateTicketController } from "../controllers/ticket/create-ticket/crea
 import { MongoUpdateTicketRepository } from "../repositories/ticket/update-ticket/mongo-update-ticket";
 import { UpdateTicketStatusController } from "../controllers/ticket/update-ticket/update-ticket";
 import { Status } from "../models/ticket";
-import { authMiddleware } from "../middlewares/auth-ticket";
+import { User } from "../models/user";
+// import { authMiddleware } from "../middlewares/auth-ticket";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
+  }
+}
 
 const ticketsRoutes = Router();
 
 // // Todas as rotas de ticket requerem autenticação
 // Wrap async middleware to handle errors
-function asyncMiddleware(handler: any) {
-  return (req: any, res: any, next: any) => {
-    Promise.resolve(handler(req, res, next)).catch(next);
-  };
-}
+// function asyncMiddleware(handler: any) {
+//   return (req: any, res: any, next: any) => {
+//     Promise.resolve(handler(req, res, next)).catch(next);
+//   };
+// }
 
-ticketsRoutes.use(asyncMiddleware(authMiddleware));
+// ticketsRoutes.use(asyncMiddleware(authMiddleware));
 
 // --- ROTAS DE LEITURA (GET) ---
 
@@ -45,7 +55,7 @@ ticketsRoutes.get("/", async (req, res) => {
 });
 
 // Buscar um ticket específico por ID (com validação de dono ou admin)
-ticketsRoutes.get("/:id", async (req, res) => {
+ticketsRoutes.get("/ticket/:id", async (req, res) => {
   const mongoGetTicketRepository = new MongoGetTicketRepository();
   const getTicketController = new GetTicketController(mongoGetTicketRepository);
 
@@ -75,7 +85,7 @@ ticketsRoutes.post("/reserve", async (req, res) => {
 // --- ROTAS DE ATUALIZAÇÃO DE STATUS (PATCH) ---
 
 // Cancelar um ingresso
-ticketsRoutes.patch("/:id/cancel", async (req, res) => {
+ticketsRoutes.patch("/ticket/:id/cancel", async (req, res) => {
   // Instanciamos ambos os repositórios necessários para o controller
   const getTicketRepository = new MongoGetTicketRepository();
   const updateTicketRepository = new MongoUpdateTicketRepository();
@@ -97,7 +107,7 @@ ticketsRoutes.patch("/:id/cancel", async (req, res) => {
 });
 
 // Marcar um ingresso como usado (ex: na entrada do cinema)
-ticketsRoutes.patch("/:id/use", async (req, res) => {
+ticketsRoutes.patch("/ticket/:id/use", async (req, res) => {
   const getTicketRepository = new MongoGetTicketRepository();
   const updateTicketRepository = new MongoUpdateTicketRepository();
 

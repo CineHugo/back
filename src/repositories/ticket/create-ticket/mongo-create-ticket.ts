@@ -3,10 +3,11 @@ import { v4 as uuidv4 } from 'uuid'; // Lembre-se de instalar: npm install uuid 
 import { MongoClient } from "../../../database/mongo";
 import { Status, Ticket } from "../../../models/ticket";
 import { CreateTicketParams, ICreateTicketRepository } from '../../../controllers/ticket/create-ticket/protocols';
+import { ClientSession } from 'mongodb';
 
 export class MongoCreateTicketRepository implements ICreateTicketRepository {
 
-  async createTicket(params: CreateTicketParams): Promise<Ticket> {
+  async createTicket(params: CreateTicketParams, options?: { session?: ClientSession }): Promise<Ticket> {
     
     // 1. PREPARAR O DOCUMENTO PARA INSERÇÃO
     const ticketToInsert = {
@@ -19,7 +20,7 @@ export class MongoCreateTicketRepository implements ICreateTicketRepository {
     try {
       const { insertedId } = await MongoClient.db
         .collection("tickets")
-        .insertOne(ticketToInsert);
+        .insertOne(ticketToInsert, { session: options?.session });
 
       const createdTicket = await MongoClient.db
         .collection<Ticket>("tickets")

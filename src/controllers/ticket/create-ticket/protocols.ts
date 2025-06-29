@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ObjectId } from "mongodb";
+import { ClientSession, ObjectId } from "mongodb";
 import { Ticket } from "../../../models/ticket";
 
 export interface CreateTicketParams {
@@ -12,5 +12,5 @@ export interface CreateTicketParams {
 }
 
 export interface ICreateTicketRepository {
-  createTicket(params: CreateTicketParams): Promise<Ticket>;
+  createTicket(params: CreateTicketParams, options?: { session?: ClientSession }): Promise<Ticket>;
 }

@@ -55,7 +55,7 @@ export class MongoUpdateSessionRepository implements IUpdateSessionRepository {
       ...params,
       ...(params.startsAt && { startsAt: newStartsAt }), // Atualiza se foi fornecido
       endsAt: newEndsAt,
-      updated_at: new Date(),
+      updatedAt: new Date(),
     };
 
     await MongoClient.db

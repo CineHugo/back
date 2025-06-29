@@ -30,7 +30,7 @@ export class CreateMovieController implements IController {
         );
       }
       if (!mainImage?.data || !bannerImage?.data) {
-        return badRequest(
+        console.log(
           "Fields mainImage and bannerImage are required with base64 data."
         );
       }
