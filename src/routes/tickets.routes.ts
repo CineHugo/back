@@ -15,7 +15,7 @@ import { CreateTicketController } from "../controllers/ticket/create-ticket/crea
 import { MongoUpdateTicketRepository } from "../repositories/ticket/update-ticket/mongo-update-ticket";
 import { UpdateTicketStatusController } from "../controllers/ticket/update-ticket/update-ticket";
 import { Status } from "../models/ticket";
-import { authMiddleware } from "../middleware/auth";
+import { authMiddleware } from "../middlewares/auth-ticket";
 
 const ticketsRoutes = Router();
 

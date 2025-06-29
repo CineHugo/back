@@ -1,14 +1,15 @@
+/* eslint-disable no-unused-vars */
 import { Router } from "express";
-import { GetUsersController } from "../controllers/get-users/get-users";
-import { MongoGetUsersRepository } from "../repositories/get-users/mongo-get-users";
-import { MongoCreateUserRepository } from "../repositories/create-user/mongo-create-user";
-import { CreateUserController } from "../controllers/create-user/create-user";
-import { MongoUpdateUserRepository } from "../repositories/update-user/mongo-update-user";
-import { UpdateUserController } from "../controllers/update-user/update-user";
-import { MongoDeleteUserRepository } from "../repositories/delete-user/mongo-delete-user";
-import { DeleteUserController } from "../controllers/delete-user/delete-user";
-import { MongoGetUserRepository } from "../repositories/get-user/mongo-get-user";
-import { GetUserController } from "../controllers/get-user/get-user";
+import { GetUsersController } from "../controllers/user/get-users/get-users";
+import { MongoGetUsersRepository } from "../repositories/user/get-users/mongo-get-users";
+import { MongoCreateUserRepository } from "../repositories/user/create-user/mongo-create-user";
+import { CreateUserController } from "../controllers/user/create-user/create-user";
+import { MongoUpdateUserRepository } from "../repositories/user/update-user/mongo-update-user";
+import { UpdateUserController } from "../controllers/user/update-user/update-user";
+import { MongoDeleteUserRepository } from "../repositories/user/delete-user/mongo-delete-user";
+import { DeleteUserController } from "../controllers/user/delete-user/delete-user";
+import { MongoGetUserRepository } from "../repositories/user/get-user/mongo-get-user";
+import { GetUserController } from "../controllers/user/get-user/get-user";
 import { isAuthenticated, isAdmin, AuthenticatedRequest } from "../middlewares/auth";
 
 

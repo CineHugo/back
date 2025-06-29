@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { MongoGetUserRepository } from "../repositories/get-user/mongo-get-user";
+import { MongoGetUserRepository } from "../repositories/user/get-user/mongo-get-user";
 
 export interface AuthenticatedRequest extends Request {
   user?: any;

@@ -6,6 +6,10 @@ import { config } from "dotenv";
 import { MongoClient } from "./database/mongo";
 import userRoutes from "./routes/user.routes"; // Importa as rotas de usuário
 import authRoutes from "./routes/auth.routes"; // Importa as rotas de autenticação
+import moviesRoutes from "./routes/movies.routes";
+import sessionsRoutes from "./routes/sessions.routes";
+import roomsRoutes from "./routes/rooms.routes";
+import ticketsRoutes from "./routes/tickets.routes";
 
 const main = async () => {
   config();
