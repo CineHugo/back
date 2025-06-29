@@ -24,10 +24,10 @@ export const serverError = (): HttpResponse<string> => {
   };
 };
 
-export const unauthorized = (): HttpResponse<string> => {
+export const unauthorized = (message?: string): HttpResponse<string> => {
   return {
     statusCode: HttpStatusCode.UNAUTHORIZED,
-    body: 'Unauthorized',
+    body: message || 'Unauthorized',
   };
 };
 
@@ -37,3 +37,18 @@ export const conflict = (message: string): HttpResponse<string> => {
     body: message,
   };
 };
+
+export const notFound = (message: string): HttpResponse<string> => {
+  return {
+    statusCode: HttpStatusCode.NOT_FOUND,
+    body: message,
+  };
+};
+
+export const forbidden = (message: string): HttpResponse<string> => {
+  return {
+    statusCode: HttpStatusCode.FORBIDDEN,
+    body: message,
+  };
+};
+

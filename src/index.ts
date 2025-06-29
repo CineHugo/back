@@ -7,6 +7,7 @@ import userRoutes from "./routes/user.routes"; // Importa as rotas de usuário
 import authRoutes from "./routes/auth.routes"; // Importa as rotas de autenticação
 import moviesRoutes from "./routes/movies.routes";
 import sessionsRoutes from "./routes/sessions.routes";
+import ticketsRoutes from "./routes/tickets.routes";
 
 const main = async () => {
   config();
@@ -29,6 +30,7 @@ const main = async () => {
 
   app.use("/sessions", sessionsRoutes);
 
+  app.use("/tickets", ticketsRoutes);
   
 
   const port = process.env.PORT || 8000;
