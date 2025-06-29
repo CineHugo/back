@@ -41,7 +41,7 @@ export class CreateMovieController implements IController {
         ImageStorageService.save(bannerImage),
       ]);
 
-      //  Monta o objeto final para o repositório
+      // Monta o objeto final para o repositório
       const movieDataToCreate: CreateMovieParams = {
         title,
         synopsis,
@@ -55,8 +55,15 @@ export class CreateMovieController implements IController {
 
       return created<Movie>(movie);
     } catch (error) {
-      console.error(error);
-      return serverError();
+      console.error("Error during movie creation:", error);
+
+      // Verifica o tipo de erro e ajusta a resposta
+      if (error instanceof Error) {
+        return serverError(error.message); // Retorna o erro específico caso seja uma instância de Error
+      }
+
+      // Se for um erro desconhecido, retorna uma mensagem genérica
+      return serverError("Something went wrong while processing your request.");
     }
   }
 }
