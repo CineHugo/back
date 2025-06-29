@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.routes"; // Importa as rotas de autenticaÃ
 import moviesRoutes from "./routes/movies.routes";
 import sessionsRoutes from "./routes/sessions.routes";
 import ticketsRoutes from "./routes/tickets.routes";
+import roomsRoutes from "./routes/rooms.routes";
 
 const main = async () => {
   config();
@@ -29,6 +30,8 @@ const main = async () => {
   app.use("/movies", moviesRoutes);
 
   app.use("/sessions", sessionsRoutes);
+
+  app.use("/rooms", roomsRoutes);
 
   app.use("/tickets", ticketsRoutes);
   
