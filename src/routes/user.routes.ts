@@ -11,12 +11,13 @@ import { MongoGetUserRepository } from "../repositories/get-user/mongo-get-user"
 import { GetUserController } from "../controllers/get-user/get-user";
 import { isAuthenticated, isAdmin, AuthenticatedRequest } from "../middlewares/auth";
 
+
 const userRoutes = Router();
 
 // Rota para listar todos os usuários - requer autenticação e admin
 userRoutes.get("/", isAuthenticated, isAdmin, async (req, res) => {
   const mongoGetUsersRepository = new MongoGetUsersRepository();
-  
+
   const getUsersController = new GetUsersController(mongoGetUsersRepository);
 
   const { body, statusCode } = await getUsersController.handle();
@@ -26,7 +27,7 @@ userRoutes.get("/", isAuthenticated, isAdmin, async (req, res) => {
 
 // Rota para criar um novo usuário
 userRoutes.post("/create/", async (req, res) => {
-  const mongoCreateUserRepository = new MongoCreateUserRepository(); 
+  const mongoCreateUserRepository = new MongoCreateUserRepository();
 
   const createUserController = new CreateUserController(
     mongoCreateUserRepository
@@ -40,13 +41,13 @@ userRoutes.post("/create/", async (req, res) => {
 });
 
 // Rota para buscar um usuário específico pelo ID
-userRoutes.get("/:id", isAuthenticated, async (req, res) => {
+userRoutes.get("/user/:id", async (req, res) => {
   const mongoGetUserRepository = new MongoGetUserRepository(); 
 
   const getUserController = new GetUserController(mongoGetUserRepository);
 
   const { body, statusCode } = await getUserController.handle({
-    body: req.body, 
+    body: req.body,
     params: req.params,
   });
 
@@ -54,15 +55,7 @@ userRoutes.get("/:id", isAuthenticated, async (req, res) => {
 });
 
 // Rota para atualizar um usuário
-userRoutes.patch("/update/:id", isAuthenticated, async (req: AuthenticatedRequest, res) => {
-  // Verificar se o usuário está tentando alterar a role para admin
-  if (req.body.role && req.body.role === "admin" && req.user?.role !== "admin") {
-    res.status(403).json({
-      error: "Apenas administradores podem alterar a role para admin",
-    });
-    return;
-  }
-
+userRoutes.patch("/update/:id", async (req, res) => {
   const mongoUpdateUserRepository = new MongoUpdateUserRepository(); 
 
   const updateUserController = new UpdateUserController(
@@ -78,7 +71,7 @@ userRoutes.patch("/update/:id", isAuthenticated, async (req: AuthenticatedReques
 });
 
 // Rota para deletar um usuário
-userRoutes.delete("/delete/:id", isAuthenticated, async (req, res) => {
+userRoutes.delete("/delete/:id", async (req, res) => {
   const mongoDeleteUserRepository = new MongoDeleteUserRepository(); 
 
   const deleteUserController = new DeleteUserController(

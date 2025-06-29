@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 /* eslint-disable no-unused-vars */
 export enum Role {
     USER = "user",
@@ -5,7 +7,7 @@ export enum Role {
   }
   
   export interface User {
-    id: string;
+    id: ObjectId;
     firstName: string;
     lastName: string;
     role: Role;
