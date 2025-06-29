@@ -5,7 +5,7 @@ export interface Session {
   movieId: ObjectId;
   roomId: ObjectId;
   startsAt: Date;
-  ends_at: Date; // Será calculado a partir de startsAt e durationMin
+  endsAt: Date; // Será calculado a partir de startsAt e durationMin
   durationMin: number;
   basePrice: number;
   createdAt: Date;

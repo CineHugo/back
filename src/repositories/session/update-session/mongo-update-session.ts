@@ -40,21 +40,21 @@ export class MongoUpdateSessionRepository implements IUpdateSessionRepository {
         $or: [
           {
             startsAt: { $lt: newEndsAt },
-            ends_at: { $gt: newStartsAt },
+            endsAt: { $gt: newStartsAt },
           },
         ],
       });
 
     if (conflictingSession) {
       throw new Error(
-        `Conflict: A session already exists in this room from ${conflictingSession.startsAt.toLocaleTimeString("pt-BR")} to ${conflictingSession.ends_at.toLocaleTimeString("pt-BR")}.`
+        `Conflict: A session already exists in this room from ${conflictingSession.startsAt.toLocaleTimeString("pt-BR")} to ${conflictingSession.endsAt.toLocaleTimeString("pt-BR")}.`
       );
     }
 
     const updateData = {
       ...params,
       ...(params.startsAt && { startsAt: newStartsAt }), // Atualiza se foi fornecido
-      ends_at: newEndsAt,
+      endsAt: newEndsAt,
       updated_at: new Date(),
     };
 

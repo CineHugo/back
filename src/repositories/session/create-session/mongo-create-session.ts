@@ -9,7 +9,7 @@ import { Session } from "../../../models/session";
 export class MongoCreateSessionRepository implements ICreateSessionRepository {
   async createSession(params: CreateSessionParams): Promise<Session> {
     const startsAt = new Date(params.startsAt);
-    const ends_at = new Date(startsAt.getTime() + params.durationMin * 60000); // Convert duration from minutes to milliseconds
+    const endsAt = new Date(startsAt.getTime() + params.durationMin * 60000); // Convert duration from minutes to milliseconds
 
     const conflictingSession = await MongoClient.db
       .collection<Session>("sessions")
@@ -18,7 +18,7 @@ export class MongoCreateSessionRepository implements ICreateSessionRepository {
         deleted_at: null, // Ignora sessões com exclusão lógica
         $or: [
           {
-            startsAt: { $lt: ends_at }, // A sessão existente começa ANTES do fim da nova
+            startsAt: { $lt: endsAt }, // A sessão existente começa ANTES do fim da nova
             endsAt: { $gt: startsAt }, // E termina DEPOIS do início da nova
           },
         ],
@@ -27,14 +27,17 @@ export class MongoCreateSessionRepository implements ICreateSessionRepository {
     if (conflictingSession) {
       // Lança um erro claro que pode ser tratado pelo controller
       throw new Error(
-        `Conflict: A session already exists in this room from ${conflictingSession.startsAt.toLocaleTimeString("pt-BR")} to ${conflictingSession.ends_at.toLocaleTimeString("pt-BR")}.`
+        `Conflict: A session already exists in this room from ${conflictingSession.startsAt.toLocaleTimeString("pt-BR")} to ${conflictingSession.endsAt.toLocaleTimeString("pt-BR")}.`
       );
     }
 
     const sessionData = {
-      ...params,
+      movieId: new ObjectId(params.movieId), // Converte para ObjectId
+      roomId: new ObjectId(params.roomId),   // Converte para ObjectId
       startsAt: startsAt,
-      ends_at: ends_at,
+      endsAt: endsAt,
+      durationMin: params.durationMin,
+      basePrice: params.basePrice,
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,

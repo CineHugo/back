@@ -10,8 +10,8 @@ import {
 
 interface CreateMovieRequest
   extends Omit<CreateMovieParams, "mainImageUrl" | "bannerImageUrl"> {
-  main_image: Base64Image;
-  banner_image: Base64Image;
+  mainImage: Base64Image;
+  bannerImage: Base64Image;
 }
 
 export class CreateMovieController implements IController {
@@ -21,7 +21,7 @@ export class CreateMovieController implements IController {
     httpRequest: HttpRequest<CreateMovieRequest>
   ): Promise<HttpResponse<Movie | string>> {
     try {
-      const { title, synopsis, releaseDate, main_image, banner_image } =
+      const { title, synopsis, releaseDate, mainImage, bannerImage } =
         httpRequest.body!;
 
       if (!title || !synopsis || !releaseDate) {
@@ -29,16 +29,16 @@ export class CreateMovieController implements IController {
           "Fields title, synopsis, and releaseDate are required."
         );
       }
-      if (!main_image?.data || !banner_image?.data) {
+      if (!mainImage?.data || !bannerImage?.data) {
         return badRequest(
-          "Fields main_image and banner_image are required with base64 data."
+          "Fields mainImage and bannerImage are required with base64 data."
         );
       }
 
       // Salva as imagens em paralelo usando o serviço
       const [mainImageUrl, bannerImageUrl] = await Promise.all([
-        ImageStorageService.save(main_image),
-        ImageStorageService.save(banner_image),
+        ImageStorageService.save(mainImage),
+        ImageStorageService.save(bannerImage),
       ]);
 
       //  Monta o objeto final para o repositório
