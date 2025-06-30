@@ -1,29 +1,22 @@
+// src/repositories/user/delete-user/mongo-delete-user.ts
+
 import { ObjectId } from "mongodb";
 import { MongoClient } from "../../../database/mongo";
 import { User } from "../../../models/user";
 import { IDeleteUserRepository } from "../../../controllers/user/delete-user/protocols";
-import { MongoUser } from "../../mongo-protocols";
 
 export class MongoDeleteUserRepository implements IDeleteUserRepository {
-  async deleteUser(id: string): Promise<User> {
-    const user = await MongoClient.db
-      .collection<MongoUser>("users")
-      .findOne({ _id: new ObjectId(id) });
+  async deleteUser(id: string): Promise<User | null> {
+    
+    // Usamos findOneAndDelete para encontrar e apagar numa só operação atómica.
+    // Ele retorna o documento que foi apagado.
+    const deletedUser = await MongoClient.db
+      .collection<User>("users")
+      .findOneAndDelete({ _id: new ObjectId(id) });
 
-    if (!user) {
-      throw new Error("User not found.");
-    }
-
-    const { deletedCount } = await MongoClient.db
-      .collection("users")
-      .deleteOne({ _id: new ObjectId(id) });
-
-    if (!deletedCount) {
-      throw new Error("User not deleted.");
-    }
-
-    const { _id, ...rest } = user;
-
-    return { id: _id, ...rest };
+    // O 'deletedUser' retornado já tem o formato correto da nossa interface User (com _id).
+    // Se nenhum documento for encontrado para apagar, ele retornará null, 
+    // o que corresponde à nossa nova assinatura de interface.
+    return deletedUser;
   }
 }

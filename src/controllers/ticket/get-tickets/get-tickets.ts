@@ -33,7 +33,7 @@ export class GetTicketsController implements IController {
         }
       } else {
         // USER: SÓ PODE VER SEUS PRÓPRIOS TICKETS. Esta regra é forçada.
-        filters.userId = user.id; // Use _id, conforme nossas convenções
+        filters.userId = user._id; // Use _id, conforme nossas convenções
       }
 
       // 3. APLICAR FILTROS ADICIONAIS (disponíveis para ambos os papéis)

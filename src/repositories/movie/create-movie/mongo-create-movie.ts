@@ -1,34 +1,39 @@
-import {
-  CreateMovieParams,
-  ICreateMovieRepository,
-} from "../../../controllers/movie/create-movie/protocols";
+// src/repositories/movie/create-movie/mongo-create-movie.ts
+
+import { ICreateMovieRepository, CreateMovieParams } from "../../../controllers/movie/create-movie/protocols";
 import { MongoClient } from "../../../database/mongo";
 import { Movie } from "../../../models/movie";
-import { MongoMovie } from "../../mongo-protocols";
 
 export class MongoCreateMovieRepository implements ICreateMovieRepository {
   async createMovie(params: CreateMovieParams): Promise<Movie> {
-    const movieData: MongoMovie = {
-      ...params,
+    
+    // 1. Preparar o documento do filme para inserção
+    const movieToInsert = {
+      title: params.title,
+      synopsis: params.synopsis,
+      releaseDate: new Date(params.releaseDate), // Garante que o campo é um objeto Date
+      mainImageUrl: params.mainImageUrl,
+      bannerImageUrl: params.bannerImageUrl,
       createdAt: new Date(),
       updatedAt: new Date(),
       deletedAt: null,
     };
 
-    const { insertedId } = await MongoClient.db
+    // 2. Inserir o filme no banco de dados
+    const result = await MongoClient.db
       .collection("movies")
-      .insertOne(movieData);
+      .insertOne(movieToInsert);
 
-    const movie = await MongoClient.db
-      .collection<MongoMovie>("movies")
-      .findOne({ _id: insertedId });
+    // 3. Buscar o filme recém-criado para obter o objeto completo com o _id gerado
+    const createdMovie = await MongoClient.db
+      .collection<Movie>("movies")
+      .findOne({ _id: result.insertedId });
 
-    if (!movie) {
-      throw new Error("Movie not created!");
+    if (!createdMovie) {
+      throw new Error("Movie not created after insert.");
     }
 
-    const { _id, ...rest } = movie;
-
-    return { id: _id, ...rest };
+    // 4. Retornar o filme criado. A sua estrutura já corresponde à interface Movie.
+    return createdMovie;
   }
 }

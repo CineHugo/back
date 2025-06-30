@@ -48,7 +48,7 @@ export class CreateTicketController implements IController {
         const ticketCreationPromises = seats.map(seat => {
           const params: CreateTicketParams = {
             sessionId: sessionId,
-            userId: user.id,
+            userId: user._id,
             seatLabel: seat.seatLabel,
             occupantName: seat.occupantName,
             occupantCpf: seat.occupantCpf,

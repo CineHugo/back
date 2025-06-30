@@ -10,5 +10,6 @@ export interface UpdateMovieParams {
 }
 
 export interface IUpdateMovieRepository {
-  updateMovie: (id: string, params: UpdateMovieParams) => Promise<Movie>;
+  // A promessa agora inclui a possibilidade de retornar 'null', caso o filme não seja encontrado
+  updateMovie(id: string, params: UpdateMovieParams): Promise<Movie | null>;
 }

@@ -31,7 +31,7 @@ export class UpdateTicketStatusController implements IController {
       if (!ticket) return notFound("Ticket not found");
 
       const isAdmin = user.role === Role.ADMIN;
-      const isOwner = ticket.userId.toHexString() === user.id.toHexString();
+      const isOwner = ticket.user?._id?.toHexString() === user._id.toHexString();
 
       if (this.targetStatus === Status.CANCELLED && !isOwner && !isAdmin) {
         return forbidden("You do not have permission to cancel this ticket.");

@@ -2,5 +2,5 @@
 import { Movie } from "../../../models/movie";
 
 export interface IDeleteMovieRepository {
-    deleteMovie(id: string): Promise<Movie>;
+    deleteMovie(id: string): Promise<Movie | null>;
 }
