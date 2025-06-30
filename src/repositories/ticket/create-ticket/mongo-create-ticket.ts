@@ -1,56 +1,51 @@
 /* eslint-disable no-useless-catch */
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { MongoClient } from "../../../database/mongo";
 import { Status, Ticket } from "../../../models/ticket";
-import { CreateTicketParams, ICreateTicketRepository } from '../../../controllers/ticket/create-ticket/protocols';
-import { ClientSession, ObjectId } from 'mongodb';
+import {
+  CreateTicketParams,
+  ICreateTicketRepository,
+} from "../../../controllers/ticket/create-ticket/protocols";
+import { ClientSession, ObjectId } from "mongodb";
 
 export class MongoCreateTicketRepository implements ICreateTicketRepository {
-
-  async createTicket(params: CreateTicketParams, options?: { session?: ClientSession }): Promise<Ticket> {
-    
-    // Desestruturar os parâmetros para garantir que todos os campos necessários estão presentes.
-    const {
-      sessionId,
-      userId,
-      seatLabel,
-      occupantName,
-      occupantCpf,
-      occupantEmail,
-    } = params;
-
-    // 1. PREPARAR O DOCUMENTO PARA INSERÇÃO
+  async createTicket(
+    params: CreateTicketParams,
+    options?: { session?: ClientSession }
+  ): Promise<Ticket> {
+    // 1. PREPARAMOS O DOCUMENTO COMPLETO QUE QUEREMOS CRIAR
+    // Geramos o _id aqui mesmo, para já o termos disponível.
     const ticketToInsert = {
-      sessionId: new ObjectId(sessionId),
-      userId: new ObjectId(userId),
-      seatLabel: seatLabel,
-      occupantName: occupantName,
-      occupantCpf: occupantCpf,
-      occupantEmail: occupantEmail,
+      _id: new ObjectId(),
+      sessionId: new ObjectId(params.sessionId),
+      userId: new ObjectId(params.userId),
+      seatLabel: params.seatLabel,
+      occupantName: params.occupantName,
+      occupantCpf: params.occupantCpf,
+      occupantEmail: params.occupantEmail,
       qrUuid: uuidv4(),
       status: Status.ACTIVE,
       createdAt: new Date(),
       updatedAt: new Date(),
-      deletedAt: null
+      deletedAt: null,
     };
 
     try {
-      const { insertedId } = await MongoClient.db
+      // 2. INSERIMOS O DOCUMENTO COMPLETO, PASSANDO A SESSÃO DA TRANSAÇÃO
+      const result = await MongoClient.db
         .collection("tickets")
         .insertOne(ticketToInsert, { session: options?.session });
 
-      // A busca também precisa de estar dentro da sessão da transação para "ver" o documento inserido.
-      const createdTicket = await MongoClient.db
-        .collection<Ticket>("tickets")
-        .findOne({ _id: insertedId }, { session: options?.session }); // Adicionada a opção de sessão
-
-      if (!createdTicket) {
-        throw new Error("Ticket not created after insert!");
+      // 3. VERIFICAMOS SE A INSERÇÃO FOI RECONHECIDA PELO BANCO
+      if (!result.insertedId) {
+        throw new Error("MongoDB failed to acknowledge the ticket insertion.");
       }
 
-      return createdTicket;
+      // 4. RETORNAMOS O OBJETO QUE JÁ TEMOS EM MÃOS. SEM BUSCA EXTRA!
+      // A aserção de tipo garante que o retorno corresponde à interface Ticket.
+      return ticketToInsert as unknown as Ticket;
     } catch (error) {
-      // Re-lança o erro original do banco de dados para ser tratado pelo Controller.
+      // Re-lança o erro original do banco para ser tratado pelo Controller.
       console.error("Error creating ticket:", error);
       throw error;
     }

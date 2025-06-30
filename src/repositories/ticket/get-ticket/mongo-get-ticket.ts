@@ -3,10 +3,10 @@
 import { ObjectId } from "mongodb";
 import { IGetTicketRepository } from "../../../controllers/ticket/get-ticket/protocols";
 import { MongoClient } from "../../../database/mongo";
-import { Ticket } from "../../../models/ticket";
+import { PopulatedTicket } from "../../../models/ticket";
 
 export class MongoGetTicketRepository implements IGetTicketRepository {
-  async getTicket(id: string): Promise<Ticket | null> {
+  async getTicket(id: string): Promise<PopulatedTicket | null> {
     const aggregationPipeline = [
       // 1. Encontra o ticket pelo ID
       {
@@ -91,7 +91,7 @@ export class MongoGetTicketRepository implements IGetTicketRepository {
 
     const tickets = await MongoClient.db
       .collection("tickets")
-      .aggregate<Ticket>(aggregationPipeline)
+      .aggregate<PopulatedTicket>(aggregationPipeline)
       .toArray();
 
     if (!tickets || tickets.length === 0) {

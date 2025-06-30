@@ -7,12 +7,12 @@ export enum Role {
   }
   
   export interface User {
-    id: ObjectId;
+    _id: ObjectId;
     firstName: string;
     lastName: string;
     role: Role;
     email: string;
-    password: string;
+    password?: string;
     rememberToken: string | null;
     createdAt: Date;
     updatedAt: Date;

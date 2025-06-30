@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
 export interface Movie {
-  id: ObjectId;
+  _id: ObjectId;
   title: string;
   synopsis: string;
   releaseDate: Date;

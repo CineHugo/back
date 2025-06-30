@@ -1,15 +1,17 @@
+// src/repositories/user/create-user/mongo-create-user.ts
+
 import { MongoClient } from "../../../database/mongo";
 import { User, Role } from "../../../models/user";
 import {
   CreateUserParams,
   ICreateUserRepository,
 } from "../../../controllers/user/create-user/protocols";
-import { MongoUser } from "../../mongo-protocols";
 import bcrypt from "bcrypt";
 
 export class MongoCreateUserRepository implements ICreateUserRepository {
   async createUser(params: CreateUserParams): Promise<User> {
 
+    // 1. MANTIVEMOS AS SUAS VALIDAÇÕES IMPORTANTES
     const emailExists = await MongoClient.db
       .collection("users")
       .findOne({ email: params.email });
@@ -27,12 +29,14 @@ export class MongoCreateUserRepository implements ICreateUserRepository {
       throw new Error("Password must be stronger");
     }
 
-    const password = await bcrypt.hash(params.password, 10);
+    // 2. PREPARAÇÃO DOS DADOS
+    const hashedPassword = await bcrypt.hash(params.password, 10);
 
-    // Completa os dados com os campos obrigatórios
-    const userData: MongoUser = {
-      ...params,
-      password: password,
+    const userToInsert = {
+      firstName: params.firstName,
+      lastName: params.lastName,
+      email: params.email,
+      password: hashedPassword,
       role: Role.USER,
       rememberToken: null,
       createdAt: new Date(),
@@ -40,22 +44,23 @@ export class MongoCreateUserRepository implements ICreateUserRepository {
       deletedAt: null,
     };
 
-    console.log(userData);
-
-    const { insertedId } = await MongoClient.db
+    // 3. INSERÇÃO NO BANCO
+    const result = await MongoClient.db
       .collection("users")
-      .insertOne(userData);
+      .insertOne(userToInsert);
 
-    const user = await MongoClient.db
-      .collection<MongoUser>("users")
-      .findOne({ _id: insertedId });
+    // 4. BUSCA DO DOCUMENTO CRIADO
+    const createdUser = await MongoClient.db
+      .collection<User>("users")
+      .findOne({ _id: result.insertedId });
 
-    if (!user) {
-      throw new Error("User not created!");
+    if (!createdUser) {
+      throw new Error("User not created after insert!");
     }
 
-    const { _id, ...rest } = user;
-
-    return { id: _id, ...rest };
+    // 5. RETORNO CORRETO E PADRONIZADO
+    // O objeto `createdUser` já tem a estrutura correta com `_id`,
+    // correspondendo à nossa interface `User`. Retornamos ele diretamente.
+    return createdUser;
   }
 }
