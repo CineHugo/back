@@ -14,7 +14,7 @@ interface ReserveTicketsBody {
   sessionId: ObjectId; // ID da sessão
   seats: Array<{
     occupantEmail: string;
-    label: string;
+    seatLabel: string;
     occupantName: string;
     occupantCpf: string;
   }>;
@@ -49,7 +49,7 @@ export class CreateTicketController implements IController {
           const params: CreateTicketParams = {
             sessionId: sessionId,
             userId: user.id,
-            seatLabel: seat.label,
+            seatLabel: seat.seatLabel,
             occupantName: seat.occupantName,
             occupantCpf: seat.occupantCpf,
             occupantEmail: seat.occupantEmail || "", // Adiciona email se disponível

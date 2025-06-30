@@ -17,7 +17,7 @@ import { MongoUpdateTicketRepository } from "../repositories/ticket/update-ticke
 import { UpdateTicketStatusController } from "../controllers/ticket/update-ticket/update-ticket";
 import { Status } from "../models/ticket";
 import { User } from "../models/user";
-// import { authMiddleware } from "../middlewares/auth-ticket";
+import { authMiddleware } from "../middlewares/auth-ticket";
 
 declare global {
   namespace Express {
@@ -31,13 +31,13 @@ const ticketsRoutes = Router();
 
 // // Todas as rotas de ticket requerem autenticação
 // Wrap async middleware to handle errors
-// function asyncMiddleware(handler: any) {
-//   return (req: any, res: any, next: any) => {
-//     Promise.resolve(handler(req, res, next)).catch(next);
-//   };
-// }
+function asyncMiddleware(handler: any) {
+  return (req: any, res: any, next: any) => {
+    Promise.resolve(handler(req, res, next)).catch(next);
+  };
+}
 
-// ticketsRoutes.use(asyncMiddleware(authMiddleware));
+ticketsRoutes.use(asyncMiddleware(authMiddleware));
 
 // --- ROTAS DE LEITURA (GET) ---
 
