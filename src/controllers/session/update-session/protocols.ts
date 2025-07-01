@@ -11,5 +11,9 @@ export interface UpdateSessionParams {
 }
 
 export interface IUpdateSessionRepository {
-  updateSession: (id: string, params: UpdateSessionParams) => Promise<Session | null>;
+  // Permite retornar null
+  updateSession(
+    id: string,
+    params: UpdateSessionParams
+  ): Promise<Session | null>;
 }

@@ -19,6 +19,9 @@ import { Status } from "../models/ticket";
 import { User } from "../models/user";
 import { authMiddleware } from "../middlewares/auth-ticket";
 
+import { ValidateTicketByQrController } from "../controllers/ticket/validate-ticket-by-qr/validate-ticket-by-qr";
+import { MongoValidateTicketByQrRepository } from "../repositories/ticket/validate-ticket-by-qr/mongo-validate-ticket-by-qr";
+
 declare global {
   namespace Express {
     interface Request {
@@ -44,11 +47,13 @@ ticketsRoutes.use(asyncMiddleware(authMiddleware));
 // Listar tickets (com filtros e permissões baseadas em role)
 ticketsRoutes.get("/", async (req, res) => {
   const mongoGetTicketsRepository = new MongoGetTicketsRepository();
-  const getTicketsController = new GetTicketsController(mongoGetTicketsRepository);
+  const getTicketsController = new GetTicketsController(
+    mongoGetTicketsRepository
+  );
 
   const { body, statusCode } = await getTicketsController.handle({
     query: req.query, // Passa os filtros da URL (ex: ?sessionId=...)
-    user: req.user,   // Passa o usuário logado para a lógica de permissão
+    user: req.user, // Passa o usuário logado para a lógica de permissão
   });
 
   res.status(statusCode).send(body);
@@ -72,7 +77,9 @@ ticketsRoutes.get("/ticket/:id", async (req, res) => {
 // Reservar um ou mais ingressos
 ticketsRoutes.post("/reserve", async (req, res) => {
   const mongoCreateTicketRepository = new MongoCreateTicketRepository();
-  const createTicketController = new CreateTicketController(mongoCreateTicketRepository);
+  const createTicketController = new CreateTicketController(
+    mongoCreateTicketRepository
+  );
 
   const { body, statusCode } = await createTicketController.handle({
     body: req.body,
@@ -94,8 +101,8 @@ ticketsRoutes.patch("/ticket/:id/cancel", async (req, res) => {
   const cancelTicketController = new UpdateTicketStatusController(
     getTicketRepository,
     updateTicketRepository,
-    Status.ACTIVE,    // Status inicial permitido
-    Status.CANCELLED  // Status de destino
+    Status.ACTIVE, // Status inicial permitido
+    Status.CANCELLED // Status de destino
   );
 
   const { body, statusCode } = await cancelTicketController.handle({
@@ -116,7 +123,7 @@ ticketsRoutes.patch("/ticket/:id/use", async (req, res) => {
     getTicketRepository,
     updateTicketRepository,
     Status.ACTIVE, // Status inicial permitido
-    Status.USED    // Status de destino
+    Status.USED // Status de destino
   );
 
   const { body, statusCode } = await useTicketController.handle({
@@ -127,5 +134,16 @@ ticketsRoutes.patch("/ticket/:id/use", async (req, res) => {
   res.status(statusCode).send(body);
 });
 
+ticketsRoutes.patch("/validate-by-qr", async (req, res) => {
+  const repo = new MongoValidateTicketByQrRepository();
+  const controller = new ValidateTicketByQrController(repo);
+
+  const { body, statusCode } = await controller.handle({
+    body: req.body, // O corpo da requisição terá o { "qrUuid": "..." }
+    user: req.user,
+  });
+
+  res.status(statusCode).send(body);
+});
 
 export default ticketsRoutes;
