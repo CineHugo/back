@@ -281,6 +281,11 @@
   resolved "https://registry.npmjs.org/@types/ms/-/ms-2.1.0.tgz"
   integrity sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==
 
+"@types/node-cron@^3.0.11":
+  version "3.0.11"
+  resolved "https://registry.npmjs.org/@types/node-cron/-/node-cron-3.0.11.tgz"
+  integrity sha512-0ikrnug3/IyneSHqCBeslAhlK2aBfYek1fGo4bP4QnZPmiqSGRK+Oy7ZMisLWkesffJvQ1cqAcBnJC+8+nxIAg==
+
 "@types/node@*", "@types/node@^22.15.17":
   version "22.15.17"
   resolved "https://registry.npmjs.org/@types/node/-/node-22.15.17.tgz"
@@ -1521,6 +1526,11 @@ node-addon-api@^5.0.0:
   version "5.1.0"
   resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-5.1.0.tgz"
   integrity sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==
+
+node-cron@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/node-cron/-/node-cron-4.2.0.tgz"
+  integrity sha512-nOdP7uH7u55w7ybQq9fusXtsResok+ErzvOBydJUPBBaQ9W+EfBaBWFPgJ8sOB7FWQednDvVBJtgP5xA0bME7Q==
 
 node-fetch@^2.6.7:
   version "2.7.0"

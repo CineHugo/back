@@ -10,11 +10,14 @@ import moviesRoutes from "./routes/movies.routes";
 import sessionsRoutes from "./routes/sessions.routes";
 import roomsRoutes from "./routes/rooms.routes";
 import ticketsRoutes from "./routes/tickets.routes";
+import { scheduleTicketExpirationJob } from "./services/ticket-expirator";
 
 const main = async () => {
   config();
 
   const app = express();
+
+  scheduleTicketExpirationJob();
 
   app.use(cors()); 
 

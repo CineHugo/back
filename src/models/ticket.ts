@@ -6,6 +6,7 @@ export enum Status {
     ACTIVE = "active",
     USED = "used",
     CANCELLED = "cancelled",
+    EXPIRED = "expired"
   }
 
 
